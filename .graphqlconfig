@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "Muzik": {
+      "schemaPath": "./src/generated/prisma.graphql"
+    }
+  }
+}
