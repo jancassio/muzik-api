@@ -1,0 +1,19 @@
+type Query {
+  """Provides general info about Muzik's api."""
+  about: About!
+}
+
+"""Describes information about Musik's api."""
+type About {
+  """API's canonical name."""
+  name: String!
+
+  """Current api's version."""
+  version: String!
+
+  """API author's name."""
+  author: String!
+
+  """Short description about."""
+  info: String!
+}
