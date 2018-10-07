@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx ts-node-dev src/index.ts",
+    "prisma": "prisma deploy --env-file .env",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
