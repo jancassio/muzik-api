@@ -1,0 +1,16 @@
+type Artist {
+  id: ID! @unique
+  name: String!
+}
+
+type Album {
+  id: ID! @unique
+  artists: [Artist!]!
+}
+
+type Track {
+  id: ID! @unique
+  name: String!
+  album: Album!
+  artists: [Artist!]!
+}

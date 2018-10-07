@@ -1,0 +1,11 @@
+endpoint: ${env:PRISMA_ENDPOINT}
+datamodel: ./database/datamodel.graphql
+secret: ${env:PRISMA_SECRET}
+
+generate:
+  - generator: typescript-client
+    output: ./src/generated/prisma
+
+hooks:
+  post-deploy:
+    - npx prisma generate
