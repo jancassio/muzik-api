@@ -1,11 +1,24 @@
+type User {
+  id: ID! @unique
+  email: String! @unique
+  name: String!
+  password: String!
+}
+
 type Artist {
   id: ID! @unique
   name: String!
+  createdBy: User
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Album {
   id: ID! @unique
   artists: [Artist!]!
+  createdBy: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Track {
@@ -13,4 +26,7 @@ type Track {
   name: String!
   album: Album!
   artists: [Artist!]!
+  createdBy: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
