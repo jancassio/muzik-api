@@ -1,7 +1,9 @@
 import { about } from './about'
+import artist from './artist'
 
 const Query = {
-  about
+  about,
+  ...artist.query
 }
 
 export default Query
