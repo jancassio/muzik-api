@@ -1,7 +1,7 @@
 import { Context } from "graphql-yoga/dist/types";
 import { GraphQLFieldResolver } from "graphql";
 
-interface About {
+export interface About {
   name: string
   version: string
   author: string
