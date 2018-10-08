@@ -1,0 +1,66 @@
+# import ArtistSubscriptionPayload from "./generated/prisma/prisma.graphql"
+
+type Query {
+  """Provides general info about Muzik's api."""
+  about: About!
+
+  """Provides all available artists."""
+  artists: [Artist!]!
+
+  """Provides an artist by it's id."""
+  artist(id: String!): Artist
+}
+
+type Mutation {
+  """Creates a new Artist."""
+  createArtist(name: String!): Artist!
+
+  """Updates an existing Artist."""
+  updateArtist(id: ID!, name: String!): Artist!
+
+  """Deletes an Artist"""
+  deleteArtist(id: ID!): Artist
+}
+
+type Subscription {
+  """Subscribes for created Artist"""
+  createArtist: ArtistSubscriptionPayload
+
+  """Subscribes for updated Artist"""
+  updateArtist: ArtistSubscriptionPayload
+
+  """Subscribes for deleted Artist"""
+  deleteArtist: ArtistSubscriptionPayload
+}
+
+"""Describes information about Musik's api."""
+type About {
+  """API's canonical name."""
+  name: String!
+
+  """Current api's version."""
+  version: String!
+
+  """API author's name."""
+  author: String!
+
+  """Short description about."""
+  info: String!
+}
+
+type Artist {
+  id: ID!
+  name: String!
+}
+
+type Album {
+  id: ID!
+  artists: [Artist!]!
+}
+
+type Track {
+  id: ID!
+  name: String!
+  album: Album!
+  artists: [Artist!]!
+}
