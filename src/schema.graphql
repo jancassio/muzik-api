@@ -19,10 +19,13 @@ type Mutation {
   # ---------------------------------------------------------------------------
 
   """Creates a new Account"""
-  signup(name: String!, email: String!, password: String!): User!
+  signup(name: String!, email: String!, password: String!): AuthorizationPayload!
+
+  """Creates a new session with an already registered account"""
+  signup(email: String!, password: String!): AuthorizationPayload!
 
   """Updates some User"""
-  updateUser(id: ID!, name: String, email: String, password: String): User!
+  updateUser(id: ID!, name: String, email: String, oldPassword:String, newPassword: String): User!
 
   """Removes a User"""
   deleteUser(id: ID!): User!
