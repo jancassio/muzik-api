@@ -9,17 +9,45 @@ type Query {
 
   """Provides an artist by it's id."""
   artist(id: String!): Artist
+
+  # ---------------------------------------------------------------------------
 }
 
 type Mutation {
+
+  # Account Mutation
+  # ---------------------------------------------------------------------------
+
+  """Creates a new Account"""
+  signup(name: String!, email: String!, password: String!): AuthorizationPayload!
+
+  """Creates a new session with an already registered account"""
+  signup(email: String!, password: String!): AuthorizationPayload!
+
+  """Updates some User"""
+  updateUser(id: ID!, name: String, email: String, oldPassword:String, newPassword: String): User!
+
+  """Removes a User"""
+  deleteUser(id: ID!): User!
+
+  # ---------------------------------------------------------------------------
+
+
+
+  # Artist Mutation
+  # ---------------------------------------------------------------------------
+
   """Creates a new Artist."""
   createArtist(name: String!): Artist!
 
   """Updates an existing Artist."""
   updateArtist(id: ID!, name: String!): Artist!
 
-  """Deletes an Artist"""
+  """Removes an Artist"""
   deleteArtist(id: ID!): Artist
+
+  # ---------------------------------------------------------------------------
+
 }
 
 type Subscription {
@@ -46,6 +74,17 @@ type About {
 
   """Short description about."""
   info: String!
+}
+
+type AuthorizationPayload {
+  token: String!
+  user: User!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
 }
 
 type Artist {
