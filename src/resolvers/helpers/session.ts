@@ -1,8 +1,16 @@
 import { Context } from "../helpers/types";
 import { verify } from "jsonwebtoken";
 
-export const authorizedUser = (context: Context) => {
-  const header = context.request.get('Authorization')
+export interface Session {
+  userId: string
+}
+
+export const authorizedUser = (context: Context): Session => {
+  const header = context.request.get('Authorization') || ''
+  if (!header) {
+    throw new Error('Authenticated user is required to do this.')
+  }
+
   const token = header.replace('MZK ', '')
   const { userId } = verify(token, process.env.MUSIK_APP_SECRET) as { userId }
 
@@ -10,5 +18,16 @@ export const authorizedUser = (context: Context) => {
     throw new Error('User not authenticated.')
   }
 
-  return userId
+  return { userId }
+}
+
+export const ensureUserCouldWrite = (id: string, context: Context) => {
+  const { userId } = authorizedUser(context)
+  const couldUpdateUser = userId === id
+    
+  if (!couldUpdateUser) {
+    throw new Error('You are not allowed to do this action')
+  }
+
+  return true
 }

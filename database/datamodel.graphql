@@ -3,11 +3,13 @@ type User {
   email: String! @unique
   name: String!
   password: String!
+  thumb: File
 }
 
 type Artist {
   id: ID! @unique
   name: String!
+  thumb: File
   createdBy: User
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -16,6 +18,7 @@ type Artist {
 type Album {
   id: ID! @unique
   artists: [Artist!]!
+  cover: File
   createdBy: User!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -26,6 +29,16 @@ type Track {
   name: String!
   album: Album!
   artists: [Artist!]!
+  createdBy: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type File {
+  id: ID! @unique
+  name: String!
+  mimetype: String!
+  encoding: String!
   createdBy: User!
   createdAt: DateTime!
   updatedAt: DateTime!
