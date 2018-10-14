@@ -1,8 +1,9 @@
 import { hash, compare } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 import { Context } from "../helpers/types";
-import { User } from "../../generated/prisma/bindings";
-import { authorizedUser } from '../helpers/session';
+import { User, FileUpdateOneInput } from "../../generated/prisma/bindings";
+import { authorizedUser, ensureUserCouldWrite } from '../helpers/session';
+import { performUpload, Upload } from '../helpers/file';
 
 const signId = (userId) => sign({ userId }, process.env.MUSIK_APP_SECRET)
 const encrypt = (string) => hash(string, 10);
@@ -61,25 +62,40 @@ const mutation = {
     }
   },
 
-  async updateUser (root: {}, { id, name, oldPassword, newPassword }: User & PasswordChange, context: Context) {
-    ensureCouldUpdateUser(id, context)
+  async updateUser (root: {}, { id, name, oldPassword, newPassword, file }: User & PasswordChange & { file: Upload }, context: Context) {
+    ensureUserCouldWrite(id, context)
 
     let cryptPassword
-
+    let thumb: FileUpdateOneInput
+    
     if (oldPassword && newPassword) {
       const user: User = await context.db.query.user({ where: { id } }, '{ password }')
       ensureIsSamePassword(oldPassword, user.password)
       cryptPassword = encrypt(newPassword);
     }
+    
+    if (file) {
+      const upload = await performUpload(file)
+
+      upload.encoding = file.encoding
+      upload.mimetype = file.mimetype
+      thumb = {
+        update: {
+          name: upload.name,
+          encoding: upload.encoding,
+          mimetype: upload.mimetype
+        }
+      }
+    }
 
     return context.db.mutation.updateUser({
-      data: { name, password: cryptPassword },
+      data: { name, password: cryptPassword, thumb },
       where: { id },
     })
   },
 
   async deleteUser (root: {}, { id, password }: User, context: Context) {
-    ensureCouldUpdateUser(id, context);
+    ensureUserCouldWrite(id, context);
     const user: User = await context.db.query.user({ where: { id } }, '{ password }')
     ensureIsSamePassword(password, user.password)
 
