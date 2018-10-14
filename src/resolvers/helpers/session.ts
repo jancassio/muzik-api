@@ -12,9 +12,7 @@ export const authorizedUser = (context: Context): Session => {
   }
 
   const token = header.replace('MZK ', '')
-  console.log('authorized user -> token', token)
   const { userId } = verify(token, process.env.MUSIK_APP_SECRET) as { userId }
-  console.log('authorized user -> userId', userId)
 
   if (!userId) {
     throw new Error('User not authenticated.')

@@ -22,17 +22,6 @@ interface PasswordChange {
   newPassword?: string
 }
 
-const ensureCouldUpdateUser = (id: string, context: Context) => {
-  const authUser = authorizedUser(context)
-  const couldUpdateUser = authUser.userId === id
-    
-  if (!couldUpdateUser) {
-    throw new Error('You are not allowed to do this action')
-  }
-
-  return true
-}
-
 const query = {} 
 
 const mutation = {
