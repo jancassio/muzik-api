@@ -1,5 +1,8 @@
 # import ArtistSubscriptionPayload from "./generated/prisma/prisma.graphql"
 
+"""Allow to do file uploads"""
+scalar Upload
+
 type Query {
   """Provides general info about Muzik's api."""
   about: About!
@@ -22,10 +25,10 @@ type Mutation {
   signup(name: String!, email: String!, password: String!): AuthorizationPayload!
 
   """Creates a new session with an already registered account"""
-  signup(email: String!, password: String!): AuthorizationPayload!
+  signin(email: String!, password: String!): AuthorizationPayload!
 
   """Updates some User"""
-  updateUser(id: ID!, name: String, email: String, oldPassword:String, newPassword: String): User!
+  updateUser(id: ID!, name: String, email: String, oldPassword:String, newPassword: String, thumbnail: Upload): User!
 
   """Removes a User"""
   deleteUser(id: ID!): User!
@@ -41,7 +44,7 @@ type Mutation {
   createArtist(name: String!): Artist!
 
   """Updates an existing Artist."""
-  updateArtist(id: ID!, name: String!): Artist!
+  updateArtist(id: ID!, name: String, thumb: Upload): Artist!
 
   """Removes an Artist"""
   deleteArtist(id: ID!): Artist
@@ -85,16 +88,19 @@ type User {
   id: ID!
   email: String!
   name: String!
+  thumb: File
 }
 
 type Artist {
   id: ID!
   name: String!
+  thumb: File
 }
 
 type Album {
   id: ID!
   artists: [Artist!]!
+  cover: File
 }
 
 type Track {
@@ -102,4 +108,9 @@ type Track {
   name: String!
   album: Album!
   artists: [Artist!]!
+}
+
+type File {
+  uri: String!
+  name: String
 }
