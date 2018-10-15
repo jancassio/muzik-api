@@ -37,6 +37,9 @@ const mutation = {
   },
 
   async deleteArtist(root: {}, { id }: Artist, context: Context) {
+    const { userId } = authorizedUser(context);
+    ensureUserCouldWrite(userId, context);
+
     return context.db.mutation.deleteArtist({ where: { id } });
   }
 };
