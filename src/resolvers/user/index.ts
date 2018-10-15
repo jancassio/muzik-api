@@ -2,7 +2,7 @@ import { hash, compare } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 import { Context } from "../helpers/types";
 import { User, FileUpdateOneInput } from "../../generated/prisma/bindings";
-import { authorizedUser, ensureUserCouldWrite } from '../helpers/session';
+import { ensureUserCouldWrite } from '../helpers/session';
 import { performUpload, Upload } from '../helpers/file';
 
 const signId = (userId) => sign({ userId }, process.env.MUSIK_APP_SECRET)
