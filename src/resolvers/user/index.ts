@@ -52,7 +52,7 @@ const mutation = {
       throw new Error('Such user not found.')
     }
 
-    ensureIsSamePassword(password, user.password)
+    await ensureIsSamePassword(password, user.password)
 
     const token = signId(user.id)
 
@@ -97,7 +97,8 @@ const mutation = {
   async deleteUser (root: {}, { id, password }: User, context: Context) {
     ensureUserCouldWrite(id, context);
     const user: User = await context.db.query.user({ where: { id } }, '{ password }')
-    ensureIsSamePassword(password, user.password)
+    
+    await ensureIsSamePassword(password, user.password)
 
     return context.db.mutation.deleteUser({ where: { id }})
   },
