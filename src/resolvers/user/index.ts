@@ -70,7 +70,7 @@ const mutation = {
     
     if (oldPassword && newPassword) {
       const user: User = await context.db.query.user({ where: { id } }, '{ password }')
-      ensureIsSamePassword(oldPassword, user.password)
+      await ensureIsSamePassword(oldPassword, user.password)
       cryptPassword = encrypt(newPassword);
     }
     
