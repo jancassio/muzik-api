@@ -1,10 +1,8 @@
 import { Context } from "../helpers/types";
-import { Album, FileCreateOneInput, FileUpdateOneInput, ArtistWhereUniqueInput, Node, Artist } from "../../generated/prisma/bindings";
+import { Album, FileCreateOneInput, FileUpdateOneInput, ArtistWhereUniqueInput, Artist } from "../../generated/prisma/bindings";
 import { authorizedUser, ensureUserCouldWrite } from "../helpers/session";
 import { performUpload, Upload } from '../helpers/file';
-import artist from "../artist";
 import { difference } from "../../helpers/list";
-import { InputType } from "zlib";
 
 const query = {
   async album (root: {}, { id }: Album, ctx: Context, info) {
