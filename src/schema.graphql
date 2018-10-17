@@ -1,4 +1,61 @@
-# import ArtistSubscriptionPayload from "./generated/prisma/prisma.graphql"
+# import ArtistSubscriptionPayload, ArtistWhereInput, ArtistOrderByInput from "./generated/prisma/prisma.graphql"
+
+type AuthorizationPayload {
+  token: String!
+  user: User!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  thumb: File
+}
+
+type Artist {
+  id: ID!
+  name: String!
+  thumb: File
+}
+
+input ArtistConnectInput {
+  id: ID!
+}
+
+type Album {
+  id: ID!
+  name: String!
+  artists: [Artist!]
+  cover: File
+}
+
+type Track {
+  id: ID!
+  name: String!
+  album: Album!
+  artists: [Artist!]!
+}
+
+type File {
+  uri: String!
+  name: String
+}
+
+"""Describes information about Musik's api."""
+type About {
+  """API's canonical name."""
+  name: String!
+
+  """Current api's version."""
+  version: String!
+
+  """API author's name."""
+  author: String!
+
+  """Short description about."""
+  info: String!
+}
+
 
 """Allow to do file uploads"""
 scalar Upload
@@ -7,11 +64,26 @@ type Query {
   """Provides general info about Muzik's api."""
   about: About!
 
+  # Artist Query
+  # ---------------------------------------------------------------------------
   """Provides all available artists."""
   artists: [Artist!]!
 
-  """Provides an artist by it's id."""
+  """Provides an artist by its id."""
   artist(id: String!): Artist
+
+  # ---------------------------------------------------------------------------
+
+
+
+  # Album Query
+  # ---------------------------------------------------------------------------
+
+  """Provides all available albums."""
+  albums: [Album!]!
+
+  """Provides an album by its id."""
+  album(id: String!): Album
 
   # ---------------------------------------------------------------------------
 }
@@ -51,6 +123,23 @@ type Mutation {
 
   # ---------------------------------------------------------------------------
 
+
+
+
+  # Album Mutation
+  # ---------------------------------------------------------------------------
+
+  """Creates a new Album."""
+  createAlbum(name: String!, artists: [ArtistConnectInput!]!, cover: Upload): Album!
+
+  """Updates an existing Album."""
+  updateAlbum(id: ID!, name: String, artists: [ArtistConnectInput!], cover: Upload): Album!
+
+  """Removes an Album"""
+  deleteAlbum(id: ID!): Album
+
+  # ---------------------------------------------------------------------------
+
 }
 
 type Subscription {
@@ -62,55 +151,4 @@ type Subscription {
 
   """Subscribes for deleted Artist"""
   deleteArtist: ArtistSubscriptionPayload
-}
-
-"""Describes information about Musik's api."""
-type About {
-  """API's canonical name."""
-  name: String!
-
-  """Current api's version."""
-  version: String!
-
-  """API author's name."""
-  author: String!
-
-  """Short description about."""
-  info: String!
-}
-
-type AuthorizationPayload {
-  token: String!
-  user: User!
-}
-
-type User {
-  id: ID!
-  email: String!
-  name: String!
-  thumb: File
-}
-
-type Artist {
-  id: ID!
-  name: String!
-  thumb: File
-}
-
-type Album {
-  id: ID!
-  artists: [Artist!]!
-  cover: File
-}
-
-type Track {
-  id: ID!
-  name: String!
-  album: Album!
-  artists: [Artist!]!
-}
-
-type File {
-  uri: String!
-  name: String
 }
