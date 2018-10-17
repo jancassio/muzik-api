@@ -3,11 +3,11 @@ import { Artist } from "../../generated/prisma/bindings";
 import { authorizedUser, ensureUserCouldWrite } from "../helpers/session";
 
 const query = {
-  async artist(root: {}, { id }: Artist, context: Context) {
-    return context.db.query.artist({ where: { id } });
+  async artist(root: {}, { id }: Artist, context: Context, info) {
+    return context.db.query.artist({ where: { id } }, info);
   },
 
-  async artists(root: any, args: Artist, context: Context, info) {
+  async artists(root: {}, args: Artist, context: Context, info) {
     return context.db.query.artists({}, info);
   }
 };
@@ -37,6 +37,9 @@ const mutation = {
   },
 
   async deleteArtist(root: {}, { id }: Artist, context: Context) {
+    const { userId } = authorizedUser(context);
+    ensureUserCouldWrite(userId, context);
+
     return context.db.mutation.deleteArtist({ where: { id } });
   }
 };
@@ -73,5 +76,5 @@ const subscription = {
 export default {
   query,
   mutation,
-  subscription
-};
+  subscription,
+} as any

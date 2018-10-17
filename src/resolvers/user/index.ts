@@ -2,7 +2,7 @@ import { hash, compare } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 import { Context } from "../helpers/types";
 import { User, FileUpdateOneInput } from "../../generated/prisma/bindings";
-import { authorizedUser, ensureUserCouldWrite } from '../helpers/session';
+import { ensureUserCouldWrite } from '../helpers/session';
 import { performUpload, Upload } from '../helpers/file';
 
 const signId = (userId) => sign({ userId }, process.env.MUSIK_APP_SECRET)
@@ -52,7 +52,7 @@ const mutation = {
       throw new Error('Such user not found.')
     }
 
-    ensureIsSamePassword(password, user.password)
+    await ensureIsSamePassword(password, user.password)
 
     const token = signId(user.id)
 
@@ -70,7 +70,7 @@ const mutation = {
     
     if (oldPassword && newPassword) {
       const user: User = await context.db.query.user({ where: { id } }, '{ password }')
-      ensureIsSamePassword(oldPassword, user.password)
+      await ensureIsSamePassword(oldPassword, user.password)
       cryptPassword = encrypt(newPassword);
     }
     
@@ -97,7 +97,8 @@ const mutation = {
   async deleteUser (root: {}, { id, password }: User, context: Context) {
     ensureUserCouldWrite(id, context);
     const user: User = await context.db.query.user({ where: { id } }, '{ password }')
-    ensureIsSamePassword(password, user.password)
+    
+    await ensureIsSamePassword(password, user.password)
 
     return context.db.mutation.deleteUser({ where: { id }})
   },
