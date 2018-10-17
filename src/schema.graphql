@@ -1,4 +1,4 @@
-# import ArtistSubscriptionPayload, ArtistWhereInput, ArtistOrderByInput from "./generated/prisma/prisma.graphql"
+# import ArtistSubscriptionPayload from "./generated/prisma/prisma.graphql"
 
 type AuthorizationPayload {
   token: String!
@@ -27,6 +27,10 @@ type Album {
   name: String!
   artists: [Artist!]
   cover: File
+}
+
+input AlbumConnectionInput {
+  id: ID!
 }
 
 type Track {
@@ -86,6 +90,20 @@ type Query {
   album(id: String!): Album
 
   # ---------------------------------------------------------------------------
+
+
+
+
+  # Track Query
+  # ---------------------------------------------------------------------------
+
+  """Provides all available tracks."""
+  tracks: [Track!]!
+
+  """Provides a track by its id."""
+  track(id: String!): Track
+  
+  # ---------------------------------------------------------------------------
 }
 
 type Mutation {
@@ -140,6 +158,19 @@ type Mutation {
 
   # ---------------------------------------------------------------------------
 
+
+
+  # Track Mutation
+  # ---------------------------------------------------------------------------
+
+  """Creates a new Track."""
+  createTrack(name: String, album: AlbumConnectionInput!, artists: [ArtistConnectInput!]!): Track!
+
+  """Updates an existing Track."""
+  updateTrack(id: ID!, name: String, album: AlbumConnectionInput, artists: [ArtistConnectInput!]): Track!
+
+  """Removes an Track."""
+  deleteTrack(id: ID!): Track
 }
 
 type Subscription {
